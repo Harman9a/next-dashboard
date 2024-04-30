@@ -1,11 +1,25 @@
 "use client";
 import axios from "axios";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("admin");
+
+  const router = useRouter();
+
+  useEffect(() => {
+    checkUserLogin();
+  }, []);
+
+  const checkUserLogin = () => {
+    let status = localStorage.getItem("islogin");
+    if (status === "true") {
+      router.push(`/admin`);
+    }
+  };
 
   const handleLogin = () => {
     axios
@@ -15,10 +29,12 @@ export default function Home() {
         userType,
       })
       .then((res) => {
-        console.log(res.data);
+        localStorage.setItem("user", res.data._id);
+        localStorage.setItem("islogin", "true");
+        router.push(`/admin`);
       })
       .catch((err) => {
-        console.log(err.response.data.message);
+        console.log(err);
       });
   };
 

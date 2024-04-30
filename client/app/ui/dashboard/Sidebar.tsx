@@ -35,7 +35,6 @@ function Sidebar() {
       }
     });
     setSideBar(updatedSidebar);
-    console.log(openName);
   };
 
   const handleMenuClick = (id: Number) => {

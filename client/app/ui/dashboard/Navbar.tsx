@@ -1,6 +1,15 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function Navbar({ toggleSidebar }: any) {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("islogin");
+    localStorage.removeItem("user");
+    router.push("/");
+  };
+
   return (
     <div>
       <div className="navbar bg-base-100">
@@ -77,7 +86,7 @@ function Navbar({ toggleSidebar }: any) {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>
