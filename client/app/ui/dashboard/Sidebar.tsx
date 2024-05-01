@@ -14,47 +14,20 @@ function Sidebar() {
 
   const setActiveMenu = () => {
     const updatedSidebar = sideBar.map((item) => {
-      if (item.submenu !== undefined) {
-        return {
-          ...item,
-          submenu: item.submenu.map((x) => {
-            if (x.link === pathname) {
-              setOpenName(item.name);
-            }
-            return {
-              ...x,
-              status: x.link === pathname,
-            };
-          }),
-        };
-      } else {
-        return {
-          ...item,
-          status: item.link === pathname,
-        };
-      }
+      return {
+        ...item,
+        status: item.link === pathname,
+      };
     });
     setSideBar(updatedSidebar);
   };
 
   const handleMenuClick = (id: Number) => {
     const updatedSidebar = sideBar.map((item) => {
-      if (item.submenu !== undefined) {
-        return {
-          ...item,
-          submenu: item.submenu.map((x) => {
-            return {
-              ...x,
-              status: x.id === id,
-            };
-          }),
-        };
-      } else {
-        return {
-          ...item,
-          status: item.id === id,
-        };
-      }
+      return {
+        ...item,
+        status: item.id === id,
+      };
     });
     setSideBar(updatedSidebar);
   };
@@ -69,44 +42,20 @@ function Sidebar() {
         <div>
           <ul className="menu bg-base-200 w-56 rounded-box">
             {sideBar.map((x) => {
-              if (x.submenu !== undefined) {
-                return (
-                  <li key={x.id}>
-                    <details>
-                      <summary>{x.name}</summary>
-                      <ul>
-                        {x.submenu.map((y) => {
-                          return (
-                            <li key={y.id}>
-                              <Link
-                                href={y.link}
-                                className={y.status === true ? "active" : ""}
-                              >
-                                {y.name}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </details>
-                  </li>
-                );
-              } else {
-                return (
-                  <li
-                    className="my-1"
-                    onClick={() => handleMenuClick(x.id)}
-                    key={x.id}
+              return (
+                <li
+                  className="my-1"
+                  onClick={() => handleMenuClick(x.id)}
+                  key={x.id}
+                >
+                  <Link
+                    href={x.link}
+                    className={x.status === true ? "active" : ""}
                   >
-                    <Link
-                      href={x.link}
-                      className={x.status === true ? "active" : ""}
-                    >
-                      {x.name}
-                    </Link>
-                  </li>
-                );
-              }
+                    {x.name}
+                  </Link>
+                </li>
+              );
             })}
           </ul>
         </div>
