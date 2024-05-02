@@ -17,7 +17,7 @@ export default function Home() {
   const checkUserLogin = () => {
     let status = localStorage.getItem("islogin");
     if (status === "true") {
-      router.push(`/admin`);
+      router.push(`/admin/caps/products`);
     }
   };
 
@@ -31,7 +31,7 @@ export default function Home() {
       .then((res) => {
         localStorage.setItem("user", res.data._id);
         localStorage.setItem("islogin", "true");
-        router.push(`/admin`);
+        router.push(`/admin/caps/products`);
       })
       .catch((err) => {
         console.log(err);

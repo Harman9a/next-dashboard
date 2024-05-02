@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { SidebarData } from "./SidebarData";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-function Sidebar() {
+function Sidebar({ data }: any) {
   const pathname = usePathname();
-  const [sideBar, setSideBar] = useState(SidebarData);
+  const [sideBar, setSideBar] = useState(data);
   const [openName, setOpenName] = useState("");
 
   useEffect(() => {
@@ -13,7 +12,7 @@ function Sidebar() {
   }, []);
 
   const setActiveMenu = () => {
-    const updatedSidebar = sideBar.map((item) => {
+    const updatedSidebar = sideBar.map((item: any) => {
       return {
         ...item,
         status: item.link === pathname,
@@ -23,7 +22,7 @@ function Sidebar() {
   };
 
   const handleMenuClick = (id: Number) => {
-    const updatedSidebar = sideBar.map((item) => {
+    const updatedSidebar = sideBar.map((item: any) => {
       return {
         ...item,
         status: item.id === id,
@@ -41,7 +40,7 @@ function Sidebar() {
         </div>
         <div>
           <ul className="menu bg-base-200 w-56 rounded-box">
-            {sideBar.map((x) => {
+            {sideBar.map((x: any) => {
               return (
                 <li
                   className="my-1"

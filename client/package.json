@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
