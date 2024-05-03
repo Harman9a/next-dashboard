@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { IoArrowBackSharp } from "@react-icons/all-files/io5/IoArrowBackSharp";
 
 function Sidebar({ data }: any) {
-  const pathname = usePathname();
   const [sideBar, setSideBar] = useState(data);
-  const [openName, setOpenName] = useState("");
 
   useEffect(() => {
     setActiveMenu();
   }, []);
 
   const setActiveMenu = () => {
+    let slug = localStorage.getItem("activeRoute");
     const updatedSidebar = sideBar.map((item: any) => {
       return {
         ...item,
-        status: item.link === pathname,
+        status: item.slug === slug,
       };
     });
     setSideBar(updatedSidebar);
   };
 
-  const handleMenuClick = (id: Number) => {
+  const handleClick = (slug: any, id: Number) => {
+    localStorage.setItem("activeRoute", slug);
     const updatedSidebar = sideBar.map((item: any) => {
       return {
         ...item,
@@ -42,15 +42,13 @@ function Sidebar({ data }: any) {
           <ul className="menu bg-base-200 w-56 rounded-box">
             {sideBar.map((x: any) => {
               return (
-                <li
-                  className="my-1"
-                  onClick={() => handleMenuClick(x.id)}
-                  key={x.id}
-                >
+                <li className="my-1" key={x.id}>
                   <Link
                     href={x.link}
+                    onClick={() => handleClick(x.slug, x.id)}
                     className={x.status === true ? "active" : ""}
                   >
+                    {x.icon && <IoArrowBackSharp />}
                     {x.name}
                   </Link>
                 </li>

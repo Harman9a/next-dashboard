@@ -139,10 +139,7 @@ export default function page() {
 
       <InputRowTotal title="TOTAL ASSETS" />
 
-      <InputRowTotal
-        title="BALANCING"
-        mystyle={{ marginTop: "20px", color: "black" }}
-      />
+      <InputRowTotal title="BALANCING" mystyle={{ marginTop: "20px" }} />
 
       <div className="flex justify-center m-6">
         <button className="btn btn-neutral btn-sm px-10" onClick={saveData}>

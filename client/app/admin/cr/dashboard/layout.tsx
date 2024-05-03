@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Navbar from "../../../ui/dashboard/Navbar";
 import Sidebar from "../../../ui/dashboard/Sidebar";
+import { DashboardSidebar } from "@/app/lib/DashboardSidebar";
 
 function layout({ children }: any) {
   const [sidebarToggle, setSidebarToggle] = useState(true);
@@ -22,7 +23,7 @@ function layout({ children }: any) {
           <Navbar toggleSidebar={toggleSidebar} />
           <div className="p-4">{children}</div>
         </div>
-        <Sidebar />
+        <Sidebar data={DashboardSidebar} />
       </div>
     </div>
   );

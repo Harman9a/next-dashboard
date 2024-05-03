@@ -29,4 +29,11 @@ export const CapsRatingSidebar = [
     link: "/admin/caps/report",
     status: false,
   },
+  {
+    id: 6,
+    name: "Back to Home",
+    link: "/admin/caps/products",
+    status: false,
+    icon: true,
+  },
 ];
