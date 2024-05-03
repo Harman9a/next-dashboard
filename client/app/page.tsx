@@ -134,7 +134,7 @@ export default function Home() {
               </div>
               <div className="my-10">
                 <button
-                  className="btn btn-primary w-full"
+                  className="btn btn-neutral w-full"
                   onClick={handleLogin}
                 >
                   Login

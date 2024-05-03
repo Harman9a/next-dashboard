@@ -8,13 +8,13 @@ export const CapsRatingSidebar = [
   {
     id: 2,
     name: "Rating Data",
-    link: "/admin/caps/ratingdata",
+    link: "/admin/caps/rating",
     status: false,
   },
   {
     id: 3,
     name: "Photo Upload",
-    link: "/admin/caps/photoupload",
+    link: "/admin/caps/media",
     status: false,
   },
   {
@@ -26,7 +26,7 @@ export const CapsRatingSidebar = [
   {
     id: 5,
     name: "Credit Rating Report",
-    link: "/admin/caps/creditratingreport",
+    link: "/admin/caps/report",
     status: false,
   },
 ];

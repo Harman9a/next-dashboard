@@ -50,14 +50,19 @@ function Dashboard() {
               <td>Quality Control Specialist</td>
               <td>
                 <div className="flex">
-                  <FcEditImage title="Edit" size={20} style={myStyle.icon} />
-                  <FcOpenedFolder
-                    onClick={openFile}
-                    title="Open"
-                    size={20}
-                    style={myStyle.icon}
-                  />
-                  <FcEmptyTrash title="Delete" size={20} style={myStyle.icon} />
+                  <div className="tooltip" data-tip="Edit">
+                    <FcEditImage size={20} style={myStyle.icon} />
+                  </div>
+                  <div className="tooltip" data-tip="Open">
+                    <FcOpenedFolder
+                      onClick={openFile}
+                      size={20}
+                      style={myStyle.icon}
+                    />
+                  </div>
+                  <div className="tooltip" data-tip="Delete">
+                    <FcEmptyTrash size={20} style={myStyle.icon} />
+                  </div>
                 </div>
               </td>
             </tr>
