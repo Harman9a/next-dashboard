@@ -1,23 +1,115 @@
 "use client";
-import React from "react";
-import { FcOpenedFolder } from "@react-icons/all-files/fc/FcOpenedFolder";
-import { FcEmptyTrash } from "@react-icons/all-files/fc/FcEmptyTrash";
-import { FcEditImage } from "@react-icons/all-files/fc/FcEditImage";
+import React, { useEffect, useState } from "react";
+import { MdEdit, MdRemoveRedEye } from "react-icons/md";
+import { FaTrash } from "react-icons/fa";
 import MyTitle from "@/app/ui/common/MyTitle";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 function Dashboard() {
   const router = useRouter();
+
+  const [branches, setBranches] = useState([]);
+  const [client, setClient] = useState([]);
+
+  const [branchId, setBranchId] = useState();
+  const [name, setName] = useState();
+  const [constitution, setConstitution] = useState();
+  const [regDate, setRegDate] = useState();
+  const [regNo, setRegno] = useState();
+  const [businessType, setBusinessType] = useState();
+  const [activeSince, setActiveSince] = useState();
+  const [facilityType, setFacilityType] = useState();
+  const [facilityDetails, setFacilityDetails] = useState();
+  const [facilityAmount, setFacilityAmount] = useState();
+  const [noOfYears, setNoOfYears] = useState();
+  const [creditAnalist, setCreditAnalist] = useState<any>();
+
+  useEffect(() => {
+    setCreditAnalist(localStorage.getItem("username"));
+    console.log(localStorage.getItem("username"));
+    getBranch();
+    getClient();
+  }, []);
+
+  const getBranch = () => {
+    axios
+      .get("http://localhost:5000/getBranch")
+      .then((res) => {
+        setBranches(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getClient = () => {
+    axios
+      .get("http://localhost:5000/getClient")
+      .then((res) => {
+        setClient(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const openModal = () => {
-    document.getElementById("my_modal_3").showModal();
+    const modal = document.getElementById("my_modal_3") as HTMLDialogElement;
+    modal.showModal();
   };
 
   const closeModal = () => {
-    document.getElementById("my_modal_3").close();
+    const modal = document.getElementById("my_modal_3") as HTMLDialogElement;
+
+    modal.close();
+  };
+
+  const handleSaveClient = () => {
+    axios
+      .post("http://localhost:5000/addClient", {
+        branchId,
+        name,
+        creditAnalist,
+        constitution,
+        regDate,
+        regNo,
+        businessType,
+        activeSince,
+        facilityType,
+        facilityDetails,
+        facilityAmount,
+        noOfYears,
+      })
+      .then((res) => {
+        if (res.data._id) {
+          getClient();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    closeModal();
+  };
+
+  const handleDeleteClient = (id: String) => {
+    axios
+      .post("http://localhost:5000/deleteClient", {
+        id,
+      })
+      .then((res) => {
+        if (res.data._id) {
+          getClient();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const openFile = () => {
     router.push("/admin/caps/balancesheet");
+    localStorage.setItem("activeRoute", "balancesheet");
   };
 
   return (
@@ -32,10 +124,9 @@ function Dashboard() {
       </div>
       <div className="overflow-x-auto">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
-              <th></th>
+              <th>Sno.</th>
               <th>Branch</th>
               <th>Name</th>
               <th>Credit Analyst</th>
@@ -43,46 +134,73 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th>1</th>
-              <td>Amritsar</td>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>
-                <div className="flex">
-                  <div className="tooltip" data-tip="Edit">
-                    <FcEditImage size={20} style={myStyle.icon} />
-                  </div>
-                  <div className="tooltip" data-tip="Open">
-                    <FcOpenedFolder
-                      onClick={openFile}
-                      size={20}
-                      style={myStyle.icon}
-                    />
-                  </div>
-                  <div className="tooltip" data-tip="Delete">
-                    <FcEmptyTrash size={20} style={myStyle.icon} />
-                  </div>
-                </div>
-              </td>
-            </tr>
+            {client.map((x: any, i) => {
+              return (
+                <tr key={i}>
+                  <th>{i + 1}</th>
+                  <td>{x.branchId}</td>
+                  <td>{x.name}</td>
+                  <td>{x.creditAnalist}</td>
+                  <td>
+                    <div className="flex">
+                      <div className="tooltip" data-tip="Open">
+                        <MdRemoveRedEye
+                          onClick={openFile}
+                          size={20}
+                          style={myStyle.icon}
+                        />
+                      </div>
+                      <div className="tooltip mx-3" data-tip="Edit">
+                        <MdEdit size={20} style={myStyle.icon} />
+                      </div>
+                      <div className="tooltip" data-tip="Delete">
+                        <FaTrash
+                          size={20}
+                          style={myStyle.icon}
+                          onClick={() => handleDeleteClient(x._id)}
+                        />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
-      {/* <button className="btn" onClick={() => openModal()}>
-        open modal
-      </button> */}
+
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box modal-box w-11/12 max-w-3xl">
           <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
             </button>
           </form>
           <h3 className="font-bold text-lg">Create New Client</h3>
           <div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="mt-3 grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <div>
+                  <div className="label">
+                    <span className="label-text">Branch</span>
+                  </div>
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e: any) => setBranchId(e.target.value)}
+                  >
+                    <option disabled selected>
+                      Select Branch
+                    </option>
+                    {branches.map((x: any, i) => {
+                      return (
+                        <option key={i} value={x._id}>
+                          {x.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
               <div>
                 <div>
                   <div className="label">
@@ -93,6 +211,8 @@ function Dashboard() {
                       type="text"
                       className="grow"
                       placeholder="Enter Client Name"
+                      onChange={(e: any) => setName(e.target.value)}
+                      value={name}
                     />
                   </label>
                 </div>
@@ -102,7 +222,10 @@ function Dashboard() {
                   <div className="label">
                     <span className="label-text">Constitution</span>
                   </div>
-                  <select className="select select-bordered w-full">
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e: any) => setConstitution(e.target.value)}
+                  >
                     <option disabled selected>
                       Select Constitution
                     </option>
@@ -124,6 +247,8 @@ function Dashboard() {
                       type="date"
                       className="grow"
                       placeholder="Enter Registration Date"
+                      onChange={(e: any) => setRegDate(e.target.value)}
+                      value={regDate}
                     />
                   </label>
                 </div>
@@ -138,6 +263,8 @@ function Dashboard() {
                       type="text"
                       className="grow"
                       placeholder="Enter Registration No."
+                      onChange={(e: any) => setRegno(e.target.value)}
+                      value={regNo}
                     />
                   </label>
                 </div>
@@ -147,7 +274,10 @@ function Dashboard() {
                   <div className="label">
                     <span className="label-text">Existing OR New Business</span>
                   </div>
-                  <select className="select select-bordered w-full">
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e: any) => setBusinessType(e.target.value)}
+                  >
                     <option disabled selected>
                       Select Business Type
                     </option>
@@ -166,6 +296,8 @@ function Dashboard() {
                       type="date"
                       className="grow"
                       placeholder="Enter Business Since"
+                      onChange={(e: any) => setActiveSince(e.target.value)}
+                      value={activeSince}
                     />
                   </label>
                 </div>
@@ -175,7 +307,10 @@ function Dashboard() {
                   <div className="label">
                     <span className="label-text">Type of Facility</span>
                   </div>
-                  <select className="select select-bordered w-full">
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e: any) => setFacilityType(e.target.value)}
+                  >
                     <option disabled selected>
                       Select Facility Type
                     </option>
@@ -192,7 +327,10 @@ function Dashboard() {
                       Fund Based Facility Details
                     </span>
                   </div>
-                  <select className="select select-bordered w-full">
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e: any) => setFacilityDetails(e.target.value)}
+                  >
                     <option disabled selected>
                       Select Facility Details
                     </option>
@@ -212,6 +350,8 @@ function Dashboard() {
                       type="text"
                       className="grow"
                       placeholder="Enter Amount in Millions"
+                      onChange={(e: any) => setFacilityAmount(e.target.value)}
+                      value={facilityAmount}
                     />
                   </label>
                 </div>
@@ -223,7 +363,10 @@ function Dashboard() {
                       Financials- Choose No. of Years
                     </span>
                   </div>
-                  <select className="select select-bordered w-full">
+                  <select
+                    className="select select-bordered w-full"
+                    onChange={(e: any) => setNoOfYears(e.target.value)}
+                  >
                     <option disabled selected>
                       Select No. of Years
                     </option>
@@ -239,7 +382,7 @@ function Dashboard() {
                 <button
                   className="btn btn-neutral my-3"
                   style={{ width: "150px" }}
-                  onClick={closeModal}
+                  onClick={handleSaveClient}
                 >
                   Save
                 </button>

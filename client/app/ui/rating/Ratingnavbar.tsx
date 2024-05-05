@@ -11,7 +11,7 @@ function Ratingnavbar() {
         <li>
           <Link
             href="/admin/caps/balancesheet"
-            className={pathname == "/admin/caps/balancesheet" ? "active" : null}
+            className={pathname == "/admin/caps/balancesheet" ? "active" : ""}
           >
             Balance Sheet
           </Link>
@@ -19,7 +19,7 @@ function Ratingnavbar() {
         <li>
           <Link
             href="/admin/caps/profitloss"
-            className={pathname == "/admin/caps/profitloss" ? "active" : null}
+            className={pathname == "/admin/caps/profitloss" ? "active" : ""}
           >
             Profit Loss
           </Link>
@@ -27,7 +27,7 @@ function Ratingnavbar() {
         <li>
           <Link
             href="/admin/caps/iscr"
-            className={pathname == "/admin/caps/iscr" ? "active" : null}
+            className={pathname == "/admin/caps/iscr" ? "active" : ""}
           >
             ISCR
           </Link>
@@ -35,7 +35,7 @@ function Ratingnavbar() {
         <li>
           <Link
             href="/admin/caps/dscr"
-            className={pathname == "/admin/caps/dscr" ? "active" : null}
+            className={pathname == "/admin/caps/dscr" ? "active" : ""}
           >
             DSCR
           </Link>
@@ -43,7 +43,7 @@ function Ratingnavbar() {
         <li>
           <Link
             href="/admin/caps/reports"
-            className={pathname == "/admin/caps/reports" ? "active" : null}
+            className={pathname == "/admin/caps/reports" ? "active" : ""}
           >
             Reports
           </Link>

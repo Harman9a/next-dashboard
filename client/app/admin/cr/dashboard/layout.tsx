@@ -4,7 +4,7 @@ import Navbar from "../../../ui/dashboard/Navbar";
 import Sidebar from "../../../ui/dashboard/Sidebar";
 import { DashboardSidebar } from "@/app/lib/DashboardSidebar";
 
-function layout({ children }: any) {
+function Layout({ children }: any) {
   const [sidebarToggle, setSidebarToggle] = useState(true);
 
   const toggleSidebar = () => {
@@ -29,4 +29,4 @@ function layout({ children }: any) {
   );
 }
 
-export default layout;
+export default Layout;

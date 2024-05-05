@@ -10,28 +10,29 @@ function Products() {
       router.push("/admin/caps/clients");
     };
     return (
-      <div
-        className="card w-50  shadow-xl bg-neutral text-neutral-content cursor-pointer"
-        onClick={hanldeClick}
-      >
-        <div className="card-body">
-          <h2 className="card-title" style={{ fontSize: "1rem" }}>
-            {text}
-          </h2>
+      <div className="flex justify-center">
+        <div
+          className="card shadow-xl bg-neutral text-neutral-content cursor-pointer items-center hover:bg-[#2b3440cf]"
+          onClick={hanldeClick}
+          style={{ width: "60%", height: 120 }}
+        >
+          <div className="card-body justify-center">
+            <h2 className="card-title" style={{ fontSize: "1rem" }}>
+              {text}
+            </h2>
+          </div>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="my-3">
+    <div className="my-5">
       <MyTitle title="Products" />
-      <div className="grid grid-cols-3 gap-4">
-        <ProductCard text="MSME (Micro - I) CAPS Model" />
-        <ProductCard text="MSME (Micro - II ) CAPS Model" />
-        <ProductCard text="MSME (Small - I ) CAPS Model" />
-        <ProductCard text="MSME (Small - II ) CAPS Model" />
-        <ProductCard text="MSME (Medium - I ) CAPS Model" />
+      <div className="grid grid-cols-2 gap-4">
+        <ProductCard text="MSME (Micro) CAPS Model" />
+        <ProductCard text="MSME (Small) CAPS Model" />
+        <ProductCard text="MSME (Medium) CAPS Model" />
         <ProductCard text="Large Company (LC) CAPS Model" />
       </div>
     </div>

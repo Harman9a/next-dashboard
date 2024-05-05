@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -66,7 +67,12 @@ function Navbar({ toggleSidebar }: any) {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img alt="Tailwind CSS Navbar component" src="/user.jpeg" />
+                <Image
+                  alt="Tailwind CSS Navbar component"
+                  src="/user.jpeg"
+                  width={100}
+                  height={100}
+                />
               </div>
             </div>
             <ul

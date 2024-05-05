@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const UserSchema = require("./Model/User");
+const BranchSchema = require("./Model/Branch");
+const ClientSchema = require("./Model/Client");
 
 require("dotenv").config();
 
@@ -44,6 +46,66 @@ app.post("/login", async (req, res) => {
     } else {
       res.status(404).json({ message: "User not found" });
     }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/addBranch", async (req, res) => {
+  try {
+    let newBranch = new BranchSchema(req.body);
+    const result = await newBranch.save();
+
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/deleteBranch", async (req, res) => {
+  try {
+    let result = await BranchSchema.findByIdAndDelete(req.body.id);
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get("/getBranch", async (req, res) => {
+  try {
+    const data = await BranchSchema.find({});
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/addClient", async (req, res) => {
+  try {
+    let newClient = new ClientSchema(req.body);
+    const result = await newClient.save();
+
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get("/getClient", async (req, res) => {
+  try {
+    const data = await ClientSchema.find({});
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/deleteClient", async (req, res) => {
+  try {
+    let result = await ClientSchema.findByIdAndDelete(req.body.id);
+
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

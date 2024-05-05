@@ -13,4 +13,11 @@ export const DashboardSidebar = [
     slug: "cr",
     status: false,
   },
+  {
+    id: 3,
+    name: "Branch",
+    link: "/admin/branch",
+    slug: "branch",
+    status: false,
+  },
 ];
