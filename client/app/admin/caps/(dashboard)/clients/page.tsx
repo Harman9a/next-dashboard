@@ -27,7 +27,6 @@ function Dashboard() {
 
   useEffect(() => {
     setCreditAnalist(localStorage.getItem("username"));
-    console.log(localStorage.getItem("username"));
     getBranch();
     getClient();
   }, []);
@@ -187,8 +186,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setBranchId(e.target.value)}
+                    defaultValue={"0"}
                   >
-                    <option disabled selected>
+                    <option value="0" disabled>
                       Select Branch
                     </option>
                     {branches.map((x: any, i) => {
@@ -225,8 +225,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setConstitution(e.target.value)}
+                    defaultValue={"0"}
                   >
-                    <option disabled selected>
+                    <option value="0" disabled>
                       Select Constitution
                     </option>
                     <option>Private Limited Company</option>
@@ -277,8 +278,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setBusinessType(e.target.value)}
+                    defaultValue={"0"}
                   >
-                    <option disabled selected>
+                    <option disabled value="0">
                       Select Business Type
                     </option>
                     <option>Existing Business</option>
@@ -310,8 +312,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setFacilityType(e.target.value)}
+                    defaultValue={"0"}
                   >
-                    <option disabled selected>
+                    <option disabled value="0">
                       Select Facility Type
                     </option>
                     <option>Fund Based</option>
@@ -330,8 +333,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setFacilityDetails(e.target.value)}
+                    defaultValue={"0"}
                   >
-                    <option disabled selected>
+                    <option disabled value="0">
                       Select Facility Details
                     </option>
                     <option>Floating Facility</option>
@@ -366,8 +370,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setNoOfYears(e.target.value)}
+                    defaultValue={"0"}
                   >
-                    <option disabled selected>
+                    <option disabled value="0">
                       Select No. of Years
                     </option>
                     <option>Current Plus One Years</option>
