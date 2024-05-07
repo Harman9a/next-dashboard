@@ -9,6 +9,10 @@ const ClientDataSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    branchName: {
+      type: String,
+      require: false,
+    },
     name: {
       type: String,
       required: true,

@@ -36,8 +36,8 @@ function Sidebar({ data }: any) {
     <div className="drawer-side">
       <div className=" p-4  min-h-full bg-base-200 text-base-content">
         <div className="flex h-16 items-center justify-center">
-          <Image alt="logo" src="/logo.png" width={100} height={100} />
-          {/* <h1>Admin Panel</h1> */}
+          {/* <Image alt="logo" src="/logo.png" width={100} height={100} /> */}
+          <h1>Admin Panel</h1>
         </div>
         <div>
           <ul className="menu bg-base-200 w-56 rounded-box">

@@ -9,6 +9,8 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("admin");
 
+  const [showAuthError, setshowAuthError] = useState(false);
+
   const router = useRouter();
 
   const checkUserLogin = () => {
@@ -34,11 +36,12 @@ export default function Home() {
         localStorage.setItem("username", email);
         localStorage.setItem("islogin", "true");
         localStorage.setItem("activeRoute", "caps");
-
+        setshowAuthError(false);
         router.push(`/admin/caps/products`);
       })
       .catch((err) => {
         console.log(err);
+        setshowAuthError(true);
       });
   };
 
@@ -50,7 +53,7 @@ export default function Home() {
           className="relative hidden dark:bg-[#14181c] lg:col-span-7 lg:block xl:col-span-8 2xl:col-span-9"
         >
           <div className="absolute inset-0 flex items-center justify-center">
-            {/* <img
+            <img
               alt="Auth Image"
               loading="lazy"
               width="1000"
@@ -59,8 +62,8 @@ export default function Home() {
               data-nimg="1"
               className="object-cover"
               src="/image.png"
-            /> */}
-            <Image
+            />
+            {/* <Image
               alt="Auth Image"
               loading="lazy"
               decoding="async"
@@ -68,7 +71,7 @@ export default function Home() {
               className="object-cover"
               src="/bg2.jpg"
               layout="fill"
-            />
+            /> */}
           </div>
         </div>
         <div className="col-span-12  lg:col-span-5 xl:col-span-4 2xl:col-span-3">
@@ -76,19 +79,25 @@ export default function Home() {
             className="flex flex-col items-stretch p-8 lg:p-16 justify-center"
             style={{ height: "100%" }}
           >
-            <div className="flex items-center justify-center">
+            {/* <div className="flex items-center justify-center">
               <Image alt="logo" src="/logo.png" width={100} height={100} />
-            </div>
+            </div> */}
             <h3 className="mt-12 mb-6 text-center text-xl font-semibold lg:mt-12">
-              Credit Appraisal Processing System
-              {/* Login */}
+              {/* Credit Appraisal Processing System */}
+              Login
             </h3>
             <div>
               <div className="my-1">
                 <div className="label">
                   <span className="label-text">Username</span>
                 </div>
-                <label className="input input-bordered flex items-center gap-2">
+                <label
+                  className={
+                    showAuthError === false
+                      ? "input input-bordered flex items-center gap-2"
+                      : "input input-bordered flex items-center gap-2 input-error"
+                  }
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -111,7 +120,13 @@ export default function Home() {
                 <div className="label">
                   <span className="label-text">Password</span>
                 </div>
-                <label className="input input-bordered flex items-center gap-2">
+                <label
+                  className={
+                    showAuthError === false
+                      ? "input input-bordered flex items-center gap-2"
+                      : "input input-bordered flex items-center gap-2 input-error"
+                  }
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -138,14 +153,27 @@ export default function Home() {
                   <span className="label-text">Role</span>
                 </div>
                 <select
-                  className="select select-bordered w-full"
+                  className={
+                    showAuthError === false
+                      ? "select select-bordered w-full"
+                      : "select  w-full input-error"
+                  }
                   onChange={(e) => setUserType(e.target.value)}
                 >
                   <option value="admin">Admin</option>
                   <option value="user">User</option>
                 </select>
               </div>
-              <div className="my-10">
+              {showAuthError === true ? (
+                <div className="text-center mt-3">
+                  <h3 className="text-red-500">
+                    Invalid Username and Password
+                  </h3>
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="my-6">
                 <button
                   className="btn btn-neutral w-full"
                   onClick={handleLogin}
