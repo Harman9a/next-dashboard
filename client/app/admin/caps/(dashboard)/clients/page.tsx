@@ -12,17 +12,17 @@ function Dashboard() {
   const [branches, setBranches] = useState([]);
   const [client, setClient] = useState([]);
 
-  const [branchId, setBranchId] = useState<any>();
+  const [branchId, setBranchId] = useState<any>("0");
   const [name, setName] = useState<any>();
-  const [constitution, setConstitution] = useState<any>();
+  const [constitution, setConstitution] = useState<any>("0");
   const [regDate, setRegDate] = useState<any>();
   const [regNo, setRegno] = useState<any>();
-  const [businessType, setBusinessType] = useState<any>();
+  const [businessType, setBusinessType] = useState<any>("0");
   const [activeSince, setActiveSince] = useState<any>();
-  const [facilityType, setFacilityType] = useState<any>();
-  const [facilityDetails, setFacilityDetails] = useState<any>();
+  const [facilityType, setFacilityType] = useState<any>("0");
+  const [facilityDetails, setFacilityDetails] = useState<any>("0");
   const [facilityAmount, setFacilityAmount] = useState<any>();
-  const [noOfYears, setNoOfYears] = useState<any>();
+  const [noOfYears, setNoOfYears] = useState<any>("0");
   const [creditAnalist, setCreditAnalist] = useState<any>();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function Dashboard() {
 
   const getBranch = () => {
     axios
-      .get("http://localhost:5000/getBranch")
+      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/getBranch`)
       .then((res) => {
         setBranches(res.data);
       })
@@ -44,7 +44,7 @@ function Dashboard() {
 
   const getClient = () => {
     axios
-      .get("http://localhost:5000/getClient")
+      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/getClient`)
       .then((res) => {
         setClient(res.data);
       })
@@ -60,15 +60,14 @@ function Dashboard() {
 
   const closeModal = () => {
     const modal = document.getElementById("my_modal_3") as HTMLDialogElement;
-
+    clearAllFields();
     modal.close();
   };
 
   const handleSaveClient = () => {
     let branchName = branchId.substr(branchId.indexOf("_") + 1);
-    console.log(branchName);
     axios
-      .post("http://localhost:5000/addClient", {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/addClient`, {
         branchId,
         branchName,
         name,
@@ -87,17 +86,16 @@ function Dashboard() {
         if (res.data._id) {
           getClient();
         }
-        clearAllFields();
+        closeModal();
       })
       .catch((err) => {
         console.log(err);
       });
-    closeModal();
   };
 
   const handleDeleteClient = (id: String) => {
     axios
-      .post("http://localhost:5000/deleteClient", {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/deleteClient`, {
         id,
       })
       .then((res) => {
@@ -110,9 +108,10 @@ function Dashboard() {
       });
   };
 
-  const openFile = () => {
-    router.push("/admin/caps/balancesheet");
+  const openFile = (id: String) => {
+    router.push(`/admin/caps/balancesheet/${id}`);
     localStorage.setItem("activeRoute", "balancesheet");
+    localStorage.setItem("activeRoute2", "balancesheet");
   };
 
   const handleEditClient = (id: String) => {
@@ -129,7 +128,17 @@ function Dashboard() {
   };
 
   const clearAllFields = () => {
+    setBranchId("0");
     setName("");
+    setConstitution("0");
+    setRegDate("");
+    setRegno("");
+    setBusinessType("0");
+    setActiveSince("");
+    setFacilityType("0");
+    setFacilityDetails("0");
+    setFacilityAmount("");
+    setNoOfYears("0");
   };
 
   return (
@@ -165,7 +174,7 @@ function Dashboard() {
                     <div className="flex">
                       <div className="tooltip" data-tip="Open">
                         <MdRemoveRedEye
-                          onClick={openFile}
+                          onClick={() => openFile(x._id)}
                           size={20}
                           style={myStyle.icon}
                         />
@@ -211,9 +220,9 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setBranchId(e.target.value)}
-                    defaultValue={"0"}
+                    value={branchId}
                   >
-                    <option value="0" disabled>
+                    <option disabled value="0">
                       Select Branch
                     </option>
                     {branches.map((x: any, i) => {
@@ -250,7 +259,7 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setConstitution(e.target.value)}
-                    defaultValue={"0"}
+                    value={constitution}
                   >
                     <option value="0" disabled>
                       Select Constitution
@@ -305,7 +314,7 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setBusinessType(e.target.value)}
-                    defaultValue={"0"}
+                    value={businessType}
                   >
                     <option disabled value="0">
                       Select Business Type
@@ -339,7 +348,7 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setFacilityType(e.target.value)}
-                    defaultValue={"0"}
+                    value={facilityType}
                   >
                     <option disabled value="0">
                       Select Facility Type
@@ -360,7 +369,7 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setFacilityDetails(e.target.value)}
-                    defaultValue={"0"}
+                    value={facilityDetails}
                   >
                     <option disabled value="0">
                       Select Facility Details
@@ -399,7 +408,7 @@ function Dashboard() {
                   <select
                     className="select select-bordered w-full"
                     onChange={(e: any) => setNoOfYears(e.target.value)}
-                    defaultValue={"0"}
+                    value={noOfYears}
                   >
                     <option disabled value="0">
                       Select No. of Years

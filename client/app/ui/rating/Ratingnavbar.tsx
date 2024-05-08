@@ -1,53 +1,52 @@
+import { RatingNavbar } from "@/app/lib/RatingNavBar";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-function Ratingnavbar() {
-  const pathname = usePathname();
+function Ratingnavbar({ id }: any) {
+  const [navBar, setNavBar] = useState(RatingNavbar);
+
+  useEffect(() => {
+    setActiveMenu();
+  }, []);
+
+  const setActiveMenu = () => {
+    let slug = localStorage.getItem("activeRoute2");
+    const updatedNavbar = navBar.map((item: any) => {
+      return {
+        ...item,
+        status: item.slug === slug,
+      };
+    });
+    setNavBar(updatedNavbar);
+  };
+
+  const handleClick = (slug: any, id: Number) => {
+    localStorage.setItem("activeRoute2", slug);
+    const updatedNavbar = navBar.map((item: any) => {
+      return {
+        ...item,
+        status: item.id === id,
+      };
+    });
+    setNavBar(updatedNavbar);
+  };
 
   return (
     <div className="text-center">
       <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
-        <li>
-          <Link
-            href="/admin/caps/balancesheet"
-            className={pathname == "/admin/caps/balancesheet" ? "active" : ""}
-          >
-            Balance Sheet
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/admin/caps/profitloss"
-            className={pathname == "/admin/caps/profitloss" ? "active" : ""}
-          >
-            Profit Loss
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/admin/caps/iscr"
-            className={pathname == "/admin/caps/iscr" ? "active" : ""}
-          >
-            ISCR
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/admin/caps/dscr"
-            className={pathname == "/admin/caps/dscr" ? "active" : ""}
-          >
-            DSCR
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/admin/caps/reports"
-            className={pathname == "/admin/caps/reports" ? "active" : ""}
-          >
-            Reports
-          </Link>
-        </li>
+        {navBar.map((x: any, i) => {
+          return (
+            <li key={i}>
+              <Link
+                href={x.link + "/" + id}
+                className={x.status === true ? "active" : ""}
+                onClick={() => handleClick(x.slug, x.id)}
+              >
+                {x.name}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

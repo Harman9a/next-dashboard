@@ -3,9 +3,11 @@ import { CapsRatingSidebar } from "@/app/lib/CapsRatingSidebar";
 import Navbar from "@/app/ui/dashboard/Navbar";
 import Sidebar from "@/app/ui/dashboard/Sidebar";
 import Ratingnavbar from "@/app/ui/rating/Ratingnavbar";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 
 function Layout({ children }: any) {
+  const params = useParams();
   const [sidebarToggle, setSidebarToggle] = useState(true);
 
   const toggleSidebar = () => {
@@ -23,7 +25,7 @@ function Layout({ children }: any) {
         <div className="drawer-content">
           <Navbar toggleSidebar={toggleSidebar} />
           <div className="p-4">
-            <Ratingnavbar />
+            <Ratingnavbar id={params.id} />
             {children}
           </div>
         </div>

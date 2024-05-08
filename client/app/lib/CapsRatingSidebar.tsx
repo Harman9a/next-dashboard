@@ -24,7 +24,7 @@ export const CapsRatingSidebar = [
     id: 4,
     name: "Proposal",
     link: "/admin/caps/proposal",
-    slug: "/admin/caps/proposal",
+    slug: "proposal",
     status: false,
   },
   {

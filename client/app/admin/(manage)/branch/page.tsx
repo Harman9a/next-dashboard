@@ -11,11 +11,12 @@ export default function Branch() {
 
   useEffect(() => {
     getBranch();
+    console.log(process.env.NEXT_PUBLIC_SERVER_URL);
   }, []);
 
   const getBranch = () => {
     axios
-      .get("http://localhost:5000/getBranch")
+      .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/getBranch`)
       .then((res) => {
         setBranches(res.data);
       })
@@ -37,7 +38,7 @@ export default function Branch() {
 
   const handleSaveBranch = () => {
     axios
-      .post("http://localhost:5000/addBranch", {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/addBranch`, {
         name,
       })
       .then((res) => {
@@ -54,7 +55,7 @@ export default function Branch() {
 
   const handleDeleteBranch = (id: String) => {
     axios
-      .post("http://localhost:5000/deleteBranch", {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/deleteBranch`, {
         id,
       })
       .then((res) => {
