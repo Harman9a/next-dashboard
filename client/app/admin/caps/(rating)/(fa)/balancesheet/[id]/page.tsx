@@ -8,6 +8,7 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
   const [yearesHeader, setYearesHeader] = useState<any>([]);
   const [totalNoOfRows, setTotalNoOfRows] = useState<any>();
+  const [balancesheetData, setBalancesheetData] = useState<any>([]);
   const [rowClass, setRowClass] = useState(
     "grid items-center grid-cols-12 sheetRow"
   );
@@ -51,28 +52,47 @@ export default function Page() {
   };
 
   const saveData = () => {
+    let balancesheet = {
+      clientId: "",
+      current_liabilities: {},
+      medium_long_term_libilities: {},
+      capital_reserve: {},
+      total_libilities: {},
+      current_assets: {},
+      fixed_assets_and_non_current_assets: {},
+      intangible_assets: {},
+      total_assets: {},
+      balancing: {},
+    };
     showToastController();
   };
 
-  const MyInput = () => {
+  const MyInput = ({ handleValueChange, sr }: any) => {
     return (
       <div>
         <input
           type="number"
           placeholder="0.00"
           className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
+          onChange={(e) => handleValueChange(sr, e.target.value)}
         />
       </div>
     );
   };
 
-  const InputRow = ({ no, title }: any) => {
+  const InputRow = ({ no, title, slug }: any) => {
+    const handleValueChange = (key: Number, value: Number) => {
+      let data = balancesheetData;
+      console.log(data);
+      console.log(slug, no, key, value);
+    };
     const inputs = [];
 
     for (let i = 1; i <= totalNoOfRows; i++) {
-      inputs.push(<MyInput key={i} />);
+      inputs.push(
+        <MyInput key={i} sr={i} handleValueChange={handleValueChange} />
+      );
     }
-
     return (
       <div className={rowClass}>
         <div>{no}</div>
@@ -119,7 +139,11 @@ export default function Page() {
   return (
     <div className="mt-6">
       <HeadingRow no="1)" title="CURRENT LIABILITIES" />
-      <InputRow no="a" title="Short Term Borrowings from Banks" />
+      <InputRow
+        no="a"
+        title="Short Term Borrowings from Banks"
+        slug="current_liabilities"
+      />
       <InputRow no="b" title="Bank Loan Installments (Due in Next 1 Yr)" />
       <InputRow no="c" title="Short Term Borrowings from Others" />
       <InputRow no="d" title="Trade Creditors" />
