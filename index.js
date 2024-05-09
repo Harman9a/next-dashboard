@@ -101,6 +101,15 @@ app.get("/getClient", async (req, res) => {
   }
 });
 
+app.post("/getClient", async (req, res) => {
+  try {
+    const data = await ClientSchema.findById(req.body.id);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.post("/deleteClient", async (req, res) => {
   try {
     let result = await ClientSchema.findByIdAndDelete(req.body.id);
