@@ -1,21 +1,57 @@
 "use client";
+import axios from "axios";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function Page() {
+  let { id } = useParams();
+  const [showToast, setShowToast] = useState(false);
+  const [yearesHeader, setYearesHeader] = useState<any>([]);
+  const [totalNoOfRows, setTotalNoOfRows] = useState<any>();
   const [rowClass, setRowClass] = useState(
     "grid items-center grid-cols-12 sheetRow"
   );
 
-  const [showToast, setShowToast] = useState(false);
+  useEffect(() => {
+    getClient();
+  }, []);
 
-  const saveData = () => {
+  const getClient = () => {
+    axios
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/getClient`, { id })
+      .then((res) => {
+        setYearsHeader(res.data.noOfYears);
+        setTotalNoOfRows(parseInt(res.data.noOfYears) + 3);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const setYearsHeader = (no: Number) => {
+    let yearsArr = [];
+    let currentYear = new Date().getFullYear();
+    yearsArr.push({ year: currentYear - 2 });
+    yearsArr.push({ year: currentYear - 1 });
+    yearsArr.push({ year: currentYear });
+
+    for (let i: any = 1; i <= no; i++) {
+      yearsArr.push({ year: currentYear + i });
+    }
+
+    setYearesHeader(yearsArr);
+  };
+
+  const showToastController = () => {
     setShowToast(true);
 
     setTimeout(() => {
       setShowToast(false);
     }, 2000);
+  };
 
-    console.log("save");
+  const saveData = () => {
+    showToastController();
   };
 
   const MyInput = () => {
@@ -31,35 +67,35 @@ export default function Page() {
   };
 
   const InputRow = ({ no, title }: any) => {
+    const inputs = [];
+
+    for (let i = 1; i <= totalNoOfRows; i++) {
+      inputs.push(<MyInput key={i} />);
+    }
+
     return (
       <div className={rowClass}>
         <div>{no}</div>
         <div className="col-span-3">{title}</div>
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
+        {inputs}
       </div>
     );
   };
 
   const InputRowTotal = ({ mystyle, title }: any) => {
+    const inputs = [];
+
+    for (let i = 1; i <= totalNoOfRows; i++) {
+      inputs.push(<MyInput key={i} />);
+    }
+
     return (
       <div className={rowClass} style={mystyle}>
         <div></div>
         <div className="col-span-3">
           <span style={{ fontSize: "13px", fontWeight: "600" }}>{title}</span>
         </div>
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
-        <MyInput />
+        {inputs}
       </div>
     );
   };
@@ -73,13 +109,9 @@ export default function Page() {
         <div className="col-span-3">
           <span style={{ fontSize: "15px", fontWeight: "500" }}>{title}</span>
         </div>
-        <div>Mar, 2023</div>
-        <div>Mar, 2024</div>
-        <div>Mar, 2025</div>
-        <div>Mar, 2026</div>
-        <div>Mar, 2027</div>
-        <div>Mar, 2028</div>
-        <div>Mar, 2029</div>
+        {yearesHeader.map((x: any, i: any) => {
+          return <div key={i}>Mar, {x.year}</div>;
+        })}
       </div>
     );
   };
@@ -114,7 +146,7 @@ export default function Page() {
 
       <InputRowTotal title="TOTAL LIABILITIES" />
 
-      <HeadingRow no="4)" title="CURRENT LIABILITIES" />
+      <HeadingRow no="4)" title="CURRENT ASSETS" />
       <InputRow no="a" title="Cash in hand" />
       <InputRow no="b" title="Bank Balances" />
       <InputRow no="c" title="Trade Debtors" />
