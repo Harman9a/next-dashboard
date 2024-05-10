@@ -8,7 +8,18 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
   const [yearesHeader, setYearesHeader] = useState<any>([]);
   const [totalNoOfRows, setTotalNoOfRows] = useState<any>();
-  const [balancesheetData, setBalancesheetData] = useState<any>([]);
+  const [balancesheetData, setBalancesheetData] = useState<any>({
+    clientId: "",
+    current_liabilities: [],
+    medium_long_term_libilities: {},
+    capital_reserve: {},
+    total_libilities: {},
+    current_assets: {},
+    fixed_assets_and_non_current_assets: {},
+    intangible_assets: {},
+    total_assets: {},
+    balancing: {},
+  });
   const [rowClass, setRowClass] = useState(
     "grid items-center grid-cols-12 sheetRow"
   );
@@ -52,18 +63,6 @@ export default function Page() {
   };
 
   const saveData = () => {
-    let balancesheet = {
-      clientId: "",
-      current_liabilities: {},
-      medium_long_term_libilities: {},
-      capital_reserve: {},
-      total_libilities: {},
-      current_assets: {},
-      fixed_assets_and_non_current_assets: {},
-      intangible_assets: {},
-      total_assets: {},
-      balancing: {},
-    };
     showToastController();
   };
 
@@ -83,9 +82,26 @@ export default function Page() {
   const InputRow = ({ no, title, slug }: any) => {
     const handleValueChange = (key: Number, value: Number) => {
       let data = balancesheetData;
+
+      if (data[slug][no] === undefined) {
+        data[slug][no] = [];
+        data[slug][no].push({ key, value });
+      } else {
+        let found = false;
+        data[slug][no].map((x: any) => {
+          if (x.key === key) {
+            x.value = value;
+            found = true;
+          }
+        });
+        if (!found) {
+          data[slug][no].push({ key, value });
+        }
+      }
+      setBalancesheetData(data);
       console.log(data);
-      console.log(slug, no, key, value);
     };
+
     const inputs = [];
 
     for (let i = 1; i <= totalNoOfRows; i++) {
@@ -144,7 +160,11 @@ export default function Page() {
         title="Short Term Borrowings from Banks"
         slug="current_liabilities"
       />
-      <InputRow no="b" title="Bank Loan Installments (Due in Next 1 Yr)" />
+      <InputRow
+        no="b"
+        title="Bank Loan Installments (Due in Next 1 Yr)"
+        slug="medium_long_term_libilities"
+      />
       <InputRow no="c" title="Short Term Borrowings from Others" />
       <InputRow no="d" title="Trade Creditors" />
       <InputRow no="e" title="Advance Payments from Customers" />
