@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const UserSchema = require("./Model/User");
 const BranchSchema = require("./Model/Branch");
 const ClientSchema = require("./Model/Client");
+const BalancesheetSchema = require("./Model/Balancesheet");
 
 require("dotenv").config();
 
@@ -115,6 +116,17 @@ app.post("/deleteClient", async (req, res) => {
     let result = await ClientSchema.findByIdAndDelete(req.body.id);
 
     res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/saveBalancesheetData", async (req, res) => {
+  try {
+    let newBalancesheet = new BalancesheetSchema(req.body);
+    // const result = await newBalancesheet.save();
+
+    res.status(200).json(req.body);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

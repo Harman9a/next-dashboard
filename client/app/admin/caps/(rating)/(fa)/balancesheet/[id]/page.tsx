@@ -10,7 +10,7 @@ export default function Page() {
   const [totalNoOfRows, setTotalNoOfRows] = useState<any>();
   const [balancesheetData, setBalancesheetData] = useState<any>({
     clientId: "",
-    current_liabilities: [],
+    current_liabilities: ["1", "2"],
     medium_long_term_libilities: {},
     capital_reserve: {},
     total_libilities: {},
@@ -61,52 +61,73 @@ export default function Page() {
       setShowToast(false);
     }, 2000);
   };
-
-  const saveData = () => {
-    showToastController();
-  };
-
-  const MyInput = ({ handleValueChange, sr }: any) => {
+  const MyInput = ({ no, slug, handleValueChange, sr }: any) => {
     return (
       <div>
         <input
           type="number"
           placeholder="0.00"
           className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-          onChange={(e) => handleValueChange(sr, e.target.value)}
+          onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
         />
       </div>
     );
   };
 
-  const InputRow = ({ no, title, slug }: any) => {
-    const handleValueChange = (key: Number, value: Number) => {
-      let data = balancesheetData;
+  const saveData = () => {
+    console.log(balancesheetData);
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/saveBalancesheetData`,
+        balancesheetData
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-      if (data[slug][no] === undefined) {
-        data[slug][no] = [];
-        data[slug][no].push({ key, value });
-      } else {
-        let found = false;
-        data[slug][no].map((x: any) => {
-          if (x.key === key) {
-            x.value = value;
-            found = true;
-          }
-        });
-        if (!found) {
-          data[slug][no].push({ key, value });
+  const handleValueChange = (
+    slug: any,
+    no: any,
+    key: Number,
+    value: Number
+  ) => {
+    let data = balancesheetData;
+    if (data[slug][no] === undefined) {
+      data[slug][no] = [];
+      data[slug][no].push({ key, value });
+    } else {
+      let found = false;
+      data[slug][no].map((x: any) => {
+        if (x.key === key) {
+          x.value = value;
+          found = true;
         }
+      });
+      if (!found) {
+        data[slug][no].push({ key, value });
       }
-      setBalancesheetData(data);
-      console.log(data);
-    };
+    }
+    console.log(balancesheetData);
+    console.log(data);
+    setBalancesheetData(data);
+  };
 
+  const InputRow = ({ no, title, slug, handleValueChange }: any) => {
     const inputs = [];
 
     for (let i = 1; i <= totalNoOfRows; i++) {
       inputs.push(
-        <MyInput key={i} sr={i} handleValueChange={handleValueChange} />
+        <MyInput
+          key={i}
+          sr={i}
+          no={no}
+          slug={slug}
+          handleValueChange={handleValueChange}
+        />
       );
     }
     return (
@@ -159,18 +180,36 @@ export default function Page() {
         no="a"
         title="Short Term Borrowings from Banks"
         slug="current_liabilities"
+        handleValueChange={handleValueChange}
       />
       <InputRow
         no="b"
         title="Bank Loan Installments (Due in Next 1 Yr)"
-        slug="medium_long_term_libilities"
+        slug="current_liabilities"
+        handleValueChange={handleValueChange}
       />
-      <InputRow no="c" title="Short Term Borrowings from Others" />
-      <InputRow no="d" title="Trade Creditors" />
-      <InputRow no="e" title="Advance Payments from Customers" />
-      <InputRow no="f" title="Taxes Payable" />
-      <InputRow no="g" title="Accrued Expenses to be paid" />
-      <InputRow no="h" title="Other Current Liabilities" />
+      <InputRow
+        no="c"
+        title="Short Term Borrowings from Others"
+        slug="current_liabilities"
+      />
+      <InputRow no="d" title="Trade Creditors" slug="current_liabilities" />
+      <InputRow
+        no="e"
+        title="Advance Payments from Customers"
+        slug="current_liabilities"
+      />
+      <InputRow no="f" title="Taxes Payable" slug="current_liabilities" />
+      <InputRow
+        no="g"
+        title="Accrued Expenses to be paid"
+        slug="current_liabilities"
+      />
+      <InputRow
+        no="h"
+        title="Other Current Liabilities"
+        slug="current_liabilities"
+      />
       <InputRowTotal title="TOTAL CURRENT LIABILITIES" />
 
       <HeadingRow no="2)" title="MEDIUM & LONG TERM LIABILITIES" />
