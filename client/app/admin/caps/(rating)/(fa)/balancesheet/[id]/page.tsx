@@ -78,61 +78,16 @@ export default function Page() {
   };
 
   const MyInput = ({ no, slug, handleValueChange, sr }: any) => {
-    if (balancesheetData[slug] !== undefined) {
-      if (balancesheetData[slug][no] !== undefined) {
-        if (balancesheetData[slug][no][sr] != undefined) {
-          let value = balancesheetData[slug][no][sr].value;
-          return (
-            <div>
-              <input
-                type="number"
-                placeholder="0.00"
-                className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-                value={value || ""}
-                onChange={(e) =>
-                  handleValueChange(slug, no, sr, e.target.value)
-                }
-              />
-            </div>
-          );
-        } else {
-          return (
-            <div>
-              <input
-                type="number"
-                placeholder="0.00"
-                className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-                onChange={(e) =>
-                  handleValueChange(slug, no, sr, e.target.value)
-                }
-              />
-            </div>
-          );
-        }
-      } else {
-        return (
-          <div>
-            <input
-              type="number"
-              placeholder="0.00"
-              className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-              onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
-            />
-          </div>
-        );
-      }
-    } else {
-      return (
-        <div>
-          <input
-            type="number"
-            placeholder="0.00"
-            className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-            onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
-          />
-        </div>
-      );
-    }
+    return (
+      <div>
+        <input
+          type="number"
+          placeholder="0.00"
+          className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
+          onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
+        />
+      </div>
+    );
   };
 
   const saveData = () => {
