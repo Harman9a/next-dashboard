@@ -121,12 +121,30 @@ app.post("/deleteClient", async (req, res) => {
   }
 });
 
+app.post("/getBalanceSheet", async (req, res) => {
+  try {
+    const data = await BalancesheetSchema.find(
+      {clientId: req.body.id}
+    );
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.post("/saveBalancesheetData", async (req, res) => {
   try {
-    let newBalancesheet = new BalancesheetSchema(req.body);
-    // const result = await newBalancesheet.save();
+    const data = await BalancesheetSchema.find(
+      {clientId: req.body.clientId}
+    );
+    if(data.length == 0){
+      let newBalancesheet = new BalancesheetSchema(req.body);
+      const result = await newBalancesheet.save();
+      res.status(200).json(result);
+    }else{
+      res.status(500).json({ message: 'Already Exist' });
+    }
 
-    res.status(200).json(req.body);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

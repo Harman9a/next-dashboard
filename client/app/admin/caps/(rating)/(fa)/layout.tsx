@@ -25,7 +25,7 @@ function Layout({ children }: any) {
         <div className="drawer-content">
           <Navbar toggleSidebar={toggleSidebar} />
           <div className="p-4">
-            <Ratingnavbar id={params.id} />
+            {/* <Ratingnavbar id={params.id} /> */}
             {children}
           </div>
         </div>

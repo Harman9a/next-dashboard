@@ -4,43 +4,43 @@ const BalancesheetDataSchema = mongoose.Schema(
   {
     clientId: {
       type: String,
-      required: false,
+      required: true,
     },
     current_liabilities: {
       type: Object,
-      require: false,
+      required: true,
     },
     medium_long_term_libilities: {
       type: Object,
-      require: false,
+      required: true,
     },
     capital_reserve: {
       type: Object,
-      require: false,
+      required: true,
     },
     total_libilities: {
       type: Object,
-      require: false,
+      required: true,
     },
     current_assets: {
       type: Object,
-      require: false,
+      required: true,
     },
     fixed_assets_and_non_current_assets: {
       type: Object,
-      require: false,
+      required: true,
     },
     intangible_assets: {
       type: Object,
-      require: false,
+      required: true,
     },
     total_assets: {
       type: Object,
-      require: false,
+      required: true,
     },
     balancing: {
       type: Object,
-      require: false,
+      required: true,
     },
   },
   { timestamps: true }

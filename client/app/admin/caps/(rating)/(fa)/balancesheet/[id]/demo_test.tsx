@@ -9,8 +9,8 @@ export default function Page() {
   const [yearesHeader, setYearesHeader] = useState<any>([]);
   const [totalNoOfRows, setTotalNoOfRows] = useState<any>();
   const [balancesheetData, setBalancesheetData] = useState<any>({
-    clientId: id,
-    current_liabilities: {},
+    clientId: "",
+    current_liabilities: [],
     medium_long_term_libilities: {},
     capital_reserve: {},
     total_libilities: {},
@@ -26,7 +26,6 @@ export default function Page() {
 
   useEffect(() => {
     getClient();
-    getBalanceSheetdata();
   }, []);
 
   const getClient = () => {
@@ -35,20 +34,6 @@ export default function Page() {
       .then((res) => {
         setYearsHeader(res.data.noOfYears);
         setTotalNoOfRows(parseInt(res.data.noOfYears) + 3);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getBalanceSheetdata = () => {
-    axios
-      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}/getBalanceSheet`, { id })
-      .then((res) => {
-        let data = res.data;
-        if (data.length !== 0) {
-          useOldData(data[0]);
-        }
       })
       .catch((err) => {
         console.log(err);
@@ -76,66 +61,21 @@ export default function Page() {
       setShowToast(false);
     }, 2000);
   };
-
   const MyInput = ({ no, slug, handleValueChange, sr }: any) => {
-    if (balancesheetData[slug] !== undefined) {
-      if (balancesheetData[slug][no] !== undefined) {
-        if (balancesheetData[slug][no][sr] != undefined) {
-          let value = balancesheetData[slug][no][sr].value;
-          return (
-            <div>
-              <input
-                type="number"
-                placeholder="0.00"
-                className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-                value={value || ""}
-                onChange={(e) =>
-                  handleValueChange(slug, no, sr, e.target.value)
-                }
-              />
-            </div>
-          );
-        } else {
-          return (
-            <div>
-              <input
-                type="number"
-                placeholder="0.00"
-                className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-                onChange={(e) =>
-                  handleValueChange(slug, no, sr, e.target.value)
-                }
-              />
-            </div>
-          );
-        }
-      } else {
-        return (
-          <div>
-            <input
-              type="number"
-              placeholder="0.00"
-              className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-              onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
-            />
-          </div>
-        );
-      }
-    } else {
-      return (
-        <div>
-          <input
-            type="number"
-            placeholder="0.00"
-            className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
-            onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
-          />
-        </div>
-      );
-    }
+    return (
+      <div>
+        <input
+          type="number"
+          placeholder="0.00"
+          className="input input-bordered input-xs w-full max-w-xs rounded-none focus:outline-none text-end"
+          onChange={(e) => handleValueChange(slug, no, sr, e.target.value)}
+        />
+      </div>
+    );
   };
 
   const saveData = () => {
+    console.log(balancesheetData);
     axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/saveBalancesheetData`,
@@ -145,41 +85,8 @@ export default function Page() {
         console.log(res.data);
       })
       .catch((err) => {
-        console.log(err.response.data.message);
+        console.log(err);
       });
-  };
-
-  const useOldData = (data: any) => {
-    let sheet = balancesheetData;
-
-    for (const key in sheet) {
-      if (sheet.hasOwnProperty(key)) {
-        for (const datakey in data) {
-          if (data.hasOwnProperty(datakey)) {
-            if (key === datakey) {
-              sheet[key] = data[datakey];
-            }
-          }
-        }
-      }
-    }
-
-    setBalancesheetData(sheet);
-  };
-
-  const handleSum = (data: any) => {
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        const value = data[key];
-        console.log(`Key: ${key}, Value:`, value);
-        for (const subKey in value) {
-          if (value.hasOwnProperty(subKey)) {
-            const subValue = value[subKey];
-            console.log(`subKey: ${subKey}, subValue:`, subValue);
-          }
-        }
-      }
-    }
   };
 
   const handleValueChange = (
@@ -204,14 +111,15 @@ export default function Page() {
         data[slug][no].push({ key, value });
       }
     }
-    // handleSum(data);
+    console.log(balancesheetData);
+    console.log(data);
     setBalancesheetData(data);
   };
 
   const InputRow = ({ no, title, slug, handleValueChange }: any) => {
     const inputs = [];
 
-    for (let i = 0; i < totalNoOfRows; i++) {
+    for (let i = 1; i <= totalNoOfRows; i++) {
       inputs.push(
         <MyInput
           key={i}
@@ -234,7 +142,7 @@ export default function Page() {
   const InputRowTotal = ({ mystyle, title }: any) => {
     const inputs = [];
 
-    for (let i = 0; i < totalNoOfRows; i++) {
+    for (let i = 1; i <= totalNoOfRows; i++) {
       inputs.push(<MyInput key={i} />);
     }
 
@@ -284,47 +192,28 @@ export default function Page() {
         no="c"
         title="Short Term Borrowings from Others"
         slug="current_liabilities"
-        handleValueChange={handleValueChange}
       />
-      <InputRow
-        no="d"
-        title="Trade Creditors"
-        slug="current_liabilities"
-        handleValueChange={handleValueChange}
-      />
+      <InputRow no="d" title="Trade Creditors" slug="current_liabilities" />
       <InputRow
         no="e"
         title="Advance Payments from Customers"
         slug="current_liabilities"
-        handleValueChange={handleValueChange}
       />
-      <InputRow
-        no="f"
-        title="Taxes Payable"
-        slug="current_liabilities"
-        handleValueChange={handleValueChange}
-      />
+      <InputRow no="f" title="Taxes Payable" slug="current_liabilities" />
       <InputRow
         no="g"
         title="Accrued Expenses to be paid"
         slug="current_liabilities"
-        handleValueChange={handleValueChange}
       />
       <InputRow
         no="h"
         title="Other Current Liabilities"
         slug="current_liabilities"
-        handleValueChange={handleValueChange}
       />
       <InputRowTotal title="TOTAL CURRENT LIABILITIES" />
 
       <HeadingRow no="2)" title="MEDIUM & LONG TERM LIABILITIES" />
-      <InputRow
-        no="a"
-        title="Bank Term Loans (Outstanding)"
-        slug="medium_long_term_libilities"
-        handleValueChange={handleValueChange}
-      />
+      <InputRow no="a" title="Bank Term Loans (Outstanding)" />
       <InputRow no="b" title="Loans from Directors" />
       <InputRow no="c" title="Loans from Friends and Relatives" />
       <InputRow no="d" title="Employee Benefits- Accumulated Funds" />
